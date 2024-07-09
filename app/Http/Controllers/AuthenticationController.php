@@ -12,7 +12,8 @@ use Illuminate\Validation\ValidationException;
 class AuthenticationController extends Controller
 {
     //register user
-    public function register(Request $request): UserDetailResource{
+    public function register(Request $request): JsonResponse
+    {
         $validated = $request->validate([
             'name' => 'required|max:100',
             'email' => 'required|max:100|email',
@@ -22,8 +23,8 @@ class AuthenticationController extends Controller
 
         $validated['password'] = Hash::make($validated['password']);
         $newUser = User::create($validated);
-        return new UserDetailResource($newUser);
 
+        return response()->json(new UserDetailResource($newUser), 201);
     }
     // user login
     public function login(Request $request){
@@ -40,7 +41,14 @@ class AuthenticationController extends Controller
            ]);
        }
 
-       return $user->createToken('user login')->plainTextToken;
+       $token = $user->createToken('user login')->plainTextToken;
+
+        return response()->json([
+            'name' => $user->name,
+            'email' => $user->email,
+            'contact' => $user->contact,
+            'token' => $token,
+        ], 200);
     }
     // user logout
     public function logout(Request $request): JsonResponse{
