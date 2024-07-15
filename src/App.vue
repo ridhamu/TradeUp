@@ -1,17 +1,17 @@
 <!-- App.vue -->
 <template>
   <div id="app">
-    <ListItem />
+    <SignIn />
   </div>
 </template>
 
 <script>
-import ListItem from './components/ListItem.vue';
+import SignIn from './components/SignIn.vue';
 
 export default {
   name: 'App',
   components: {
-    ListItem
+    SignIn
   }
 };
 </script>
